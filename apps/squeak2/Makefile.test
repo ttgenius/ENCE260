@@ -1,0 +1,64 @@
+# File:   Makefile
+# Author: M. P. Hayes, UCECE
+# Date:   11 Sep 2010
+# Descr:  Makefile for squeak2
+
+CC = gcc
+CFLAGS = -Wall -Wstrict-prototypes -Wextra -g -I../../drivers/test -I../../drivers -I../../extra -I../../utils
+
+DEL = rm
+
+
+# Default target.
+all: squeak2
+
+
+# Compile: create object files from C source files.
+squeak2-test.o: squeak2.c ../../drivers/button.h ../../drivers/led.h ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h ../../drivers/test/timer.h ../../extra/mmelody.h ../../extra/ticker.h ../../extra/tweeter.h ../../utils/task.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+button-test.o: ../../drivers/button.c ../../drivers/button.h ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+led-test.o: ../../drivers/led.c ../../drivers/led.h ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+mgetkey-test.o: ../../drivers/test/mgetkey.c ../../drivers/test/mgetkey.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+pio-test.o: ../../drivers/test/pio.c ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+system-test.o: ../../drivers/test/system.c ../../drivers/test/avrtest.h ../../drivers/test/mgetkey.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+timer-test.o: ../../drivers/test/timer.c ../../drivers/test/system.h ../../drivers/test/timer.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+mmelody-test.o: ../../extra/mmelody.c ../../drivers/test/system.h ../../extra/mmelody.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+ticker-test.o: ../../extra/ticker.c
+	$(CC) -c $(CFLAGS) $< -o $@
+
+tweeter-test.o: ../../extra/tweeter.c ../../drivers/test/system.h ../../extra/ticker.h ../../extra/tweeter.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+task-test.o: ../../utils/task.c ../../drivers/test/system.h ../../drivers/test/timer.h ../../utils/task.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+
+
+
+# Link: create executable file from object files.
+squeak2: squeak2-test.o button-test.o led-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o mmelody-test.o ticker-test.o tweeter-test.o task-test.o
+	$(CC) $(CFLAGS) $^ -o $@ -lrt
+
+
+# Clean: delete derived files.
+.PHONY: clean
+clean: 
+	-$(DEL) squeak2 squeak2-test.o button-test.o led-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o mmelody-test.o ticker-test.o tweeter-test.o task-test.o
+
+
+

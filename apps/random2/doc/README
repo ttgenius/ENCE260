@@ -1,0 +1,16 @@
+Running make in this directory will generate a number of PDF graphs.
+In the callgraph, the arrows means "calls".  In the dependency graphs,
+the arrows means "requires" (or "depends upon").
+
+callgraph.pdf             This shows the callgraph, i.e., what functions each
+                          function in the program calls.
+module_dependencies.pdf   This shows the dependencies between the modules.
+file_dependencies.pdf     This shows the dependencies between the files.
+makefile_dependencies.pdf This shows the dependencies required by make when
+                          building the program.
+build_dependencies.pdf    This is like makefile_dependencies.pdf but shows
+                          the operations performed to generate the new file.
+
+callgraph.d               This shows the callgraph in text format.
+files.d                   This shows the file dependencies in text format.
+modules.d                 This shows the module dependencies in text format.

@@ -1,0 +1,49 @@
+# File:   Makefile
+# Author: M. P. Hayes, UCECE
+# Date:   11 Sep 2010
+# Descr:  Makefile for lab1-ex4
+
+CC = gcc
+CFLAGS = -Wall -Wstrict-prototypes -Wlab1-extra -g -I. -I../../drivers/test
+
+DEL = rm
+
+
+# Default target.
+all: lab1-ex4
+
+
+# Compile: create object files from C source files.
+lab1-ex4-test.o: lab1-ex4.c ../../drivers/test/system.h button.h led.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+mgetkey-test.o: ../../drivers/test/mgetkey.c ../../drivers/test/mgetkey.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+pio-test.o: ../../drivers/test/pio.c ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+system-test.o: ../../drivers/test/system.c ../../drivers/test/avrtest.h ../../drivers/test/mgetkey.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+button-test.o: button.c ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h button.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+led-test.o: led.c ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h led.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+
+
+
+# Link: create lab1-executable file from object files.
+lab1-ex4: lab1-ex4-test.o mgetkey-test.o pio-test.o system-test.o button-test.o led-test.o
+	$(CC) $(CFLAGS) $^ -o $@ -lrt
+
+
+# Clean: delete derived files.
+.PHONY: clean
+clean: 
+	-$(DEL) lab1-ex4 lab1-ex4-test.o mgetkey-test.o pio-test.o system-test.o button-test.o led-test.o
+
+
+

@@ -1,0 +1,88 @@
+# File:   Makefile
+# Author: M. P. Hayes, UCECE
+# Date:   11 Sep 2010
+# Descr:  Makefile for space12
+
+CC = gcc
+CFLAGS = -Wall -Wstrict-prototypes -Wextra -g -I. -I../../drivers/test -I../../extra -I../../utils -I../../fonts -I../../drivers
+
+DEL = rm
+
+
+# Default target.
+all: space12
+
+
+# Compile: create object files from C source files.
+space12-test.o: space12.c ../../drivers/display.h ../../drivers/led.h ../../drivers/navswitch.h ../../drivers/test/avrtest.h ../../drivers/test/eeprom.h ../../drivers/test/pio.h ../../drivers/test/system.h ../../drivers/test/timer.h ../../extra/mmelody.h ../../extra/ticker.h ../../extra/tweeter.h ../../fonts/font3x5_1.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h ../../utils/uint8toa.h flasher.h spacey.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+flasher-test.o: flasher.c ../../drivers/test/system.h flasher.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+spacey-test.o: spacey.c ../../drivers/test/system.h spacey.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+display-test.o: ../../drivers/display.c ../../drivers/display.h ../../drivers/ledmat.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+led-test.o: ../../drivers/led.c ../../drivers/led.h ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+ledmat-test.o: ../../drivers/ledmat.c ../../drivers/ledmat.h ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+navswitch-test.o: ../../drivers/navswitch.c ../../drivers/navswitch.h ../../drivers/test/avrtest.h ../../drivers/test/delay.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+eeprom-test.o: ../../drivers/test/eeprom.c ../../drivers/test/eeprom.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+mgetkey-test.o: ../../drivers/test/mgetkey.c ../../drivers/test/mgetkey.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+pio-test.o: ../../drivers/test/pio.c ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+system-test.o: ../../drivers/test/system.c ../../drivers/test/avrtest.h ../../drivers/test/mgetkey.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+timer-test.o: ../../drivers/test/timer.c ../../drivers/test/system.h ../../drivers/test/timer.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+mmelody-test.o: ../../extra/mmelody.c ../../drivers/test/system.h ../../extra/mmelody.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+ticker-test.o: ../../extra/ticker.c
+	$(CC) -c $(CFLAGS) $< -o $@
+
+tweeter-test.o: ../../extra/tweeter.c ../../drivers/test/system.h ../../extra/ticker.h ../../extra/tweeter.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+font-test.o: ../../utils/font.c ../../drivers/test/system.h ../../utils/font.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+task-test.o: ../../utils/task.c ../../drivers/test/system.h ../../drivers/test/timer.h ../../utils/task.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+tinygl-test.o: ../../utils/tinygl.c ../../drivers/display.h ../../drivers/test/system.h ../../utils/font.h ../../utils/tinygl.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+uint8toa-test.o: ../../utils/uint8toa.c ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+
+
+
+# Link: create executable file from object files.
+space12: space12-test.o flasher-test.o spacey-test.o display-test.o led-test.o ledmat-test.o navswitch-test.o eeprom-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o mmelody-test.o ticker-test.o tweeter-test.o font-test.o task-test.o tinygl-test.o uint8toa-test.o
+	$(CC) $(CFLAGS) $^ -o $@ -lrt
+
+
+# Clean: delete derived files.
+.PHONY: clean
+clean: 
+	-$(DEL) space12 space12-test.o flasher-test.o spacey-test.o display-test.o led-test.o ledmat-test.o navswitch-test.o eeprom-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o mmelody-test.o ticker-test.o tweeter-test.o font-test.o task-test.o tinygl-test.o uint8toa-test.o
+
+
+

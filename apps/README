@@ -1,0 +1,24 @@
+This directory contains a number of test applications contained in
+their own sub-directories.  Each application has a numerical suffix.
+As a rule, the larger the number the more difficult the program.
+
+Within each sub-directory are two makefiles; one called Makefile and
+the other called Makefile.test.  By default when make is run it will
+read Makefile.
+
+make           --- builds the application for the ATmega8
+make program   --- programs the application into the ATmega8 flash memory
+make clean     --- deletes the object and executable files
+
+
+The other makefile, Makefile.test, will compile the application
+natively for the PC with a test scaffold replacing the AVR dependent
+modules.  This allows the application to be run and debugged on a PC.
+
+make -f Makefile.test        --- builds the application for the PC
+make -f Makefile.test clean  --- deletes the object and executable files
+
+
+tone1  Play a continuous tone (if piezo tweeter connected)
+tone2  Play a louder continuous tone (if piezo tweeter connected) by driving
+       PIO pins in anti-phase

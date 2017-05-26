@@ -1,0 +1,123 @@
+To create a new font, edit a font definition file with text editor.
+Then run make.  This will run fontgen to create a corresponding .h
+file that can be included in a program.
+
+Here's an example format for a font definition file.  The first line
+is a comment, the second line defines the width of each font
+character, and the third light defines the height of each font
+character.  The following lines describe the font characters.  The
+. characters indicate an off pixel and other characters (such as @ or
+#) indicate an on pixel.  The first character is the corresponding
+ASCII symbol.
+
+The font does not need to be contiguous.  Empty entries will be
+displayed as blanks.  However, they will take up memory.
+
+# This is a demo font with only 3 characters.
+width=5
+height=7
+ 
+.....
+.....
+.....
+.....
+.....
+.....
+.....
+!
+.@@..
+.@@..
+.@@..
+.@@..
+.@@..
+.....
+.@@..
+"
+.@.@.
+.@.@.
+.@.@.
+.....
+.....
+.....
+.....
+
+
+The font entries with indices below 32 can be specified using \nnn
+where nnn is the octal representation for the desired index.  For
+example, here are three faces assigned to indices 1, 2, 3.  Note,
+index 0 cannot be used since this marks the end of a string.
+
+# Here's a demo font of three faces.
+width=5
+height=7
+\001
+.@.@.
+.@.@.
+.@.@.
+.....
+.....
+@...@
+.@@@.
+\002
+.....
+@@.@@
+@@.@@
+.....
+..@..
+@...@
+.@@@.
+\003
+.....
+@@.@@
+@@.@@
+.....
+..@..
+.@@@.
+@...@
+
+The tricky bit is representing these codes in C.  You have to do
+something like tinygl_text ("\001\002\003"); An alternative, is to
+assign these to printable characters.  For example,
+
+# Here's a demo font of three faces.
+width=5
+height=7
+A
+.@.@.
+.@.@.
+.@.@.
+.....
+.....
+@...@
+.@@@.
+B
+.....
+@@.@@
+@@.@@
+.....
+..@..
+@...@
+.@@@.
+C
+.....
+@@.@@
+@@.@@
+.....
+..@..
+.@@@.
+@...@
+
+Then you can display them with tinygl_text ("ABC"); Unfortunately, the
+font cannot display ABC as well.  One solution is to load multiple
+fonts and switch between them.
+
+#include "faces5x7.h"
+#include "font5x7_1.h"
+
+tinygl_font_set (&faces5x7);
+tinygl_text ("ABC");
+
+tinygl_font_set (&font5x7_1);
+tinygl_text ("ABC");
+
+However, only one font can be active at a time.

@@ -1,0 +1,4 @@
+To create the online documentation run make then load the file
+html/index.html into a web browser, for example,
+$ make
+$ firefox html/index.html

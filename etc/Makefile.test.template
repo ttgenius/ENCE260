@@ -1,0 +1,30 @@
+# File:   Makefile
+# Author: M. P. Hayes, UCECE
+# Date:   11 Sep 2010
+# Descr:  Makefile for @PROJECT@
+
+CC = gcc
+CFLAGS = -Wall -Wstrict-prototypes -Wextra -g @INCLUDES@
+
+DEL = rm
+
+
+# Default target.
+all: @PROJECT@
+
+
+# Compile: create object files from C source files.
+@CCRULES@
+
+
+# Link: create executable file from object files.
+@PROJECT@: @OBJ@
+	$(CC) $(CFLAGS) $^ -o $@ -lrt
+
+
+# Clean: delete derived files.
+.PHONY: clean
+clean: 
+	-$(DEL) @PROJECT@ @OBJ@
+
+

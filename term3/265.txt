@@ -1,0 +1,34 @@
+create table VEHICLE
+(plates varchar(6) not null primary key,
+ v_year char(4) constraint vhk_year check(v_year between '1900' and '2020'),
+ eng_no varchar(9) not null unique,
+ ch_no  varchar(7) not null unique,
+ type   char(1) constraint check_type check(type in ('p','r','t','l','m')),
+ make varchar(10),
+ model varchar(10),
+ constraint v_fk foreign key (make, model) references tanja.VEHICLE_TYPE),
+ 
+ 
+ create table OWNS
+ (plates varchar(6) not null references tanja.VEHICLE,
+  Ownerid varchar (8) not null references tanja.OWNER,
+  purchase_date date not null,
+  DRR integer not null,
+  DateSold date,
+  constraint o_pk primary key (plates, Ownerid));
+  
+  create table COLOR
+  (plates varchar(6) not null references tanja.VEHICLE,
+   color varchar(9) not null,
+   constraint o_pk primary key (plates,color));
+   
+  create table REGISTRATION 
+  (plates varchar(6) not null references tanja.VEHICLE,
+   emp varchar(10) not null references tanja.EMPLOYEE,
+   re_org varchar varchar(10) not null references tanja.REG_ORG,
+   reg_date not null date,
+   country varchar(10),
+   DRR integer not null ,
+   amount float,
+   constraint o_pk primary key (plates, emp,re_org,reg_date));
+ 

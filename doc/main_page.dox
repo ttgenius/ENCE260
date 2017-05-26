@@ -1,0 +1,259 @@
+/** \mainpage UCFK4
+
+@section intro Introduction
+
+@section structure Directory structure
+
+- @c apps     --- contains a sub-directory for each example application
+- @c drivers  --- generic device driver modules
+- @c drivers/avr --- AVR dependent device driver modules
+- @c drivers/test --- test scaffold modules 
+- @c utils    --- utility modules
+- @c doc      --- documentation
+- @c etc      --- miscellaneous scripts
+- @c fonts    --- fonts and font creation program
+
+
+@section examples Example applications
+
+
+There are a number of example applications of increasing complexity in the @c apps directory:
+- @ref bounce1 "bounce1" --- a simple application that
+drives the LED matrix display directly.
+- @ref bounce2 "bounce2" --- this does not worry about refreshing the display; instead this is
+performed by the @ref display "display" and @ref ledmat "ledmat"
+modules. 
+- @ref hello1 "hello1" --- displays a message using the @ref ledmat "ledmat" module.
+- @ref updown1 "updown1" --- increments or decrements a count depending on button pushes.
+- @ref bounce3 "bounce3" --- uses a higher abstraction for driving the display; a tiny graphics library (@ref tinygl "tinygl") built on top of the @ref display "display" and @ref ledmat "ledmat" modules.
+- @ref hello2 "hello2" --- displays a message using the @ref tinygl "tinygl" module.
+- @ref updown2 "updown2" --- increments or decrements a count depending on button pushes provided by the @ref button "button" module.
+- @ref hello4 "hello4" --- displays a message using the @ref tinygl "tinygl" module.  It also switches from text step to text scroll modes using the @ref button "button" module to detect button presses.
+- @ref bounce4 "bounce4" --- controls two balls using the
+@ref boing "boing" module to update the state of a bouncing ball.
+- @ref bounce5 "bounce5" --- controls three balls, again using
+the @ref boing "boing" module.  It also flashes the balls at different
+rates and detects collisions.
+- @ref fonttest1 "fonttest1" --- displays each character in two fonts.
+- @ref ir_serial_test1 "ir_serial_test1" --- tests the @ref IR_serial "ir_serial" module.
+- @ref ir_serial_test2 "ir_serial_test2" --- tests the @ref IR_serial "ir_serial" module.
+- @ref ir_serial_test3 "ir_serial_test3" --- tests the @ref IR_serial "ir_serial" module.
+- @ref space9 "space9" --- a space invaders style game.
+- @ref space10 "space10" --- a space invaders style game remotely controlled using the  @ref IR_serial "ir_serial" module from the @ref spacey_remote1 "spacey_remote1" application.
+- @ref space11 "space11" --- similar to @ref space9 but using @ref task "task" module instead of @ref pacer "pacer" module.
+
+
+Each application sub-directory contains a makefile called @c Makefile.
+This contains rules for the @c make program to compile the application.
+For example, an application can be compiled using
+@verbatim
+$ make
+@endverbatim
+
+Similarly, the application can be programmed into the flash memory of
+the ATmega32u2 using
+@verbatim
+$ make program
+@endverbatim
+
+The executable and object files can be deleted using
+@verbatim
+$ make clean
+@endverbatim
+
+Here's an example of building and programming the application @c hello1.hex:
+@verbatim
+$ cd apps/hello1
+$ ls
+hello1.c  Makefile  Makefile.test  simplefont.h
+$ makeavr-gcc -c -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../fonts -I../../drivers -I../../drivers/avr hello1.c -o hello1.o
+avr-gcc -c -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../fonts -I../../drivers -I../../drivers/avr ../../drivers/avr/target.c -o target.o
+avr-gcc -c -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../fonts -I../../drivers -I../../drivers/avr ../../drivers/pacer.c -o pacer.o
+avr-gcc -c -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../fonts -I../../drivers -I../../drivers/avr ../../drivers/avr/timer.c -o timer.o
+avr-gcc -c -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../fonts -I../../drivers -I../../drivers/avr ../../drivers/led.c -o led.o
+avr-gcc -c -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../fonts -I../../drivers -I../../drivers/avr ../../drivers/avr/pio.c -o pio.o
+avr-gcc -c -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../fonts -I../../drivers -I../../drivers/avr ../../drivers/ledmat.c -o ledmat.o
+avr-gcc -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../fonts -I../../drivers -I../../drivers/avr hello1.o target.o pacer.o timer.o led.o pio.o ledmat.o -o hello1.out -lm
+avr-size hello1.out
+   text	   data	    bss	    dec	    hex	filename
+   1038	    374	      5	   1417	    589	hello1.out
+avr-objcopy -O ihex hello1.out hello1.hex
+$ ls
+hello1.c    hello1.o    ledmat.o  Makefile.test  pio.o
+hello1.hex  hello1.out  Makefile  pacer.o        simplefont.h
+$ make program
+make program
+dfu-programmer atmega32u2 erase; dfu-programmer atmega32u2 flash hello1.hex; dfu-programmer atmega32u2 start
+Validating...
+1236 bytes used (4.31%)
+$ make clean
+rm *.o *.out *.hex
+$ ls
+hello1.c  Makefile  Makefile.test  simplefont.h
+@endverbatim
+
+@section utils Utility modules
+
+Useful utility modules are grouped in the directory
+called @c utils.  These include:
+- @ref boing "boing" --- @ref boing
+- @ref pacer "pacer" --- @ref pacer
+- @ref task "task" --- @ref task
+- @ref tinygl "tinygl" --- @ref tinygl
+- @ref uint8toa "uint8toa" --- @ref uint8toa (this uses much less memory than @c sprintf)
+
+
+@section drivers Device drivers
+
+Device drivers are grouped in the directory called @c drivers.  These include:
+- @ref button "button" --- @ref button
+- @ref display "display" --- @ref display
+- @ref LED "LED" --- @ref LED
+- @ref ledmat "ledmat" --- @ref ledmat
+- @ref IR "IR" ---  @ref IR
+- @ref IR_serial "IR serial" ---  @ref IR_serial (this has been superseded by @ref IR_uart "IR uart")
+- @ref IR_uart "IR uart" ---  @ref IR_uart
+- @ref navswitch "navswitch" --- @ref navswitch
+
+
+@section HAL Hardware abstraction layer
+
+
+Hardware dependent modules are grouped in the directory @c drivers/avr.   These provide a hardware abstraction layer (HAL) and include:
+- @ref delay "delay" --- @ref delay (useful for short relative delays)
+- @ref eeprom "eeprom" --- @ref eeprom (useful for storing high-scores etc. in non-volatile EEPROM memory)
+- @ref timer "timer" --- @ref timer (useful for absolute delays)
+- @ref pio "pio" --- @ref pio (provides an abstraction of the I/O ports.  Note @c pio.h uses advanced techniques to reduce memory usage; I suggest looking at @c pio-simple.h and @c pio-simple.c for a much simpler implementation.)
+
+
+@section documentation Documentation
+
+This documentation has been created by a program called doxygen.  This
+is derived from comment information specified in the program files.
+Special comment block markers are required by doxygen.  These start
+with <tt>\** </tt>.  Inside these comment blocks, doxygen looks for
+special names such as <tt>\@file</tt> or <tt>\\file</tt>.
+
+Running the @c make program in the @c doc directory will run doxygen.
+It will generate html files that can be viewed by a web browser in the
+@c doc/html directory.  The main page is called @c index.html.  Note,
+you may need to edit the INPUT field in @c doc/doxygen.config to
+specify new directories.
+
+
+@section Testing
+
+I have created a simple test-scaffold so that programs can be run
+natively on a PC.  The test-scaffold files in drivers/test replaces the
+hardware specific modules in avr_test, such as @ref timer "timer".
+Each example application has a makefile called Makefile.test.  This is
+selected using the -f option to make.  For example,
+@verbatim
+$ make -f Makefile.test
+@endverbatim
+will produce a native application that will run in a terminal window
+of a PC.  When the program runs, the output of the display is shown in
+the terminal window.  The arrow keys correspond to the four directions
+of the navswitch and the spacebar corresponds to the push of the
+navswitch.  The period key corresponds to the pushbutton.
+
+Here's an example of building the test application @c hello1.
+
+@verbatim
+$ cd apps/hello1
+$ make -f Makefile.test 
+gcc -c -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../drivers -I../../drivers/test hello1.c -o hello1-test.o
+gcc -c -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../drivers -I../../drivers/test ../../drivers/test/target.c -o target-test.o
+gcc -c -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../drivers -I../../drivers/test ../../drivers/test/avrtest.c -o avrtest-test.o
+gcc -c -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../drivers -I../../drivers/test ../../drivers/test/pio.c -o pio-test.o
+gcc -c -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../drivers -I../../drivers/test ../../drivers/test/mgetkey.c -o mgetkey-test.o
+gcc -c -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../drivers -I../../drivers/test ../../drivers/pacer.c -o pacer-test.o
+gcc -c -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../drivers -I../../drivers/test ../../drivers/test/timer.c -o timer-test.o
+gcc -c -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../drivers -I../../drivers/test ../../drivers/led.c -o led-test.o
+gcc -c -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../drivers -I../../drivers/test ../../drivers/ledmat.c -o ledmat-test.o
+gcc -Wall -Wstrict-prototypes -Wextra -g -I. -I../../utils -I../../drivers -I../../drivers/test hello1-test.o target-test.o avrtest-test.o pio-test.o mgetkey-test.o pacer-test.o timer-test.o led-test.o ledmat-test.o -o hello1 -lrt
+$ ls
+avrtest-test.d  hello1-test.d  Makefile       pio-test.d       ucfktest-test.o
+avrtest-test.o  hello1-test.o  Makefile.test  pio-test.o
+hello1          ledmat-test.d  pacer-test.d   simplefont.h
+hello1.c        ledmat-test.o  pacer-test.o   ucfktest-test.d
+@endverbatim
+
+The test application is called @c hello1.  It can be run using:
+@verbatim
+$ ./hello1
+.....
+.....
+.....
+.....
+.....
+.....
+.....
+
+@....
+@....
+@....
+@....
+@....
+@....
+@....
+
+@....
+@....
+@....
+@@...
+@....
+@....
+@....
+<ctrl-c>
+@endverbatim
+
+
+@section Fonts
+
+The @c font directory contains a program (@c fontgen.c) that will
+convert custom fonts specified in a text file into a header file with
+a lookup table that can be loaded into an application.  For further
+details, see @c font/README.
+
+For example, here's a custom face font mapped to the ASCII characters
+'A', 'B', and 'C'.
+
+<pre>
+width=5
+height=7
+A
+.#.#.
+.#.#.
+.#.#.
+.....
+.....
+#...#
+.###.
+B
+.....
+##.##
+##.##
+.....
+..#..
+#...#
+.###.
+C
+.....
+##.##
+##.##
+.....
+..#..
+.###.
+#...#
+</pre>
+
+
+@section bugs Bugs
+
+If you think you've found a bug, or have a suggestion for an
+improvement, either in this documentation or in the code itself,
+please email michael.hayes@canterbury.ac.nz.
+
+*/
+

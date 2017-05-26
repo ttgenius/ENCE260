@@ -1,0 +1,20 @@
+Lab1 programs
+lab1-ex1   Flash LED by writing to port registers
+lab1-ex2   Flash LED, using helper functions to write to port registers directly
+lab1-ex3   Flash LED, using helper functions in module led1.c to write to port registers directly
+lab1-ex4   Flash LED, using helper functions in module led1.c to write to port registers using pio abstraction
+lab1-ex5   Flash LED, using led device driver
+
+Lab2 programs
+lab2-ex1   Implement paced loop by writing to timer/counter1 registers directly
+lab2-ex2   Implement paced loop, using helper functions in mypacer.c by writing to timer/counter1 registers directly
+lab2-ex3   Implement paced loop using pacer.c
+lab2-ex4   Flash LED in LED matrix
+lab2-ex5   Output pattern by multiplexing LED matrix
+
+Lab3 programs
+lab3-ex1   Reimplement stopwatch program using paced loop.
+lab3-ex2   Hello world!
+lab3-ex3   Using the navswitch
+lab3-ex4   Using the navswitch and IR communications.
+

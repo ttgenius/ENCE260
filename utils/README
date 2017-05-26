@@ -1,0 +1,4 @@
+This is a collection of common modules, such as utility functions,
+etc.  Note, that these modules do not directly access the hardware but
+instead use the device driver modules.
+

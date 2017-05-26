@@ -1,0 +1,64 @@
+# File:   Makefile
+# Author: M. P. Hayes, UCECE
+# Date:   11 Sep 2010
+# Descr:  Makefile for stopwatch1
+
+CC = gcc
+CFLAGS = -Wall -Wstrict-prototypes -Wextra -g -I../../drivers/test -I../../drivers -I../../fonts -I../../utils
+
+DEL = rm
+
+
+# Default target.
+all: stopwatch1
+
+
+# Compile: create object files from C source files.
+stopwatch1-test.o: stopwatch1.c ../../drivers/button.h ../../drivers/display.h ../../drivers/test/system.h ../../drivers/test/timer.h ../../fonts/font3x5_1.h ../../utils/font.h ../../utils/task.h ../../utils/tinygl.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+button-test.o: ../../drivers/button.c ../../drivers/button.h ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+display-test.o: ../../drivers/display.c ../../drivers/display.h ../../drivers/ledmat.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+ledmat-test.o: ../../drivers/ledmat.c ../../drivers/ledmat.h ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+mgetkey-test.o: ../../drivers/test/mgetkey.c ../../drivers/test/mgetkey.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+pio-test.o: ../../drivers/test/pio.c ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+system-test.o: ../../drivers/test/system.c ../../drivers/test/avrtest.h ../../drivers/test/mgetkey.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+timer-test.o: ../../drivers/test/timer.c ../../drivers/test/system.h ../../drivers/test/timer.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+font-test.o: ../../utils/font.c ../../drivers/test/system.h ../../utils/font.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+task-test.o: ../../utils/task.c ../../drivers/test/system.h ../../drivers/test/timer.h ../../utils/task.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+tinygl-test.o: ../../utils/tinygl.c ../../drivers/display.h ../../drivers/test/system.h ../../utils/font.h ../../utils/tinygl.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+
+
+
+# Link: create executable file from object files.
+stopwatch1: stopwatch1-test.o button-test.o display-test.o ledmat-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o font-test.o task-test.o tinygl-test.o
+	$(CC) $(CFLAGS) $^ -o $@ -lrt
+
+
+# Clean: delete derived files.
+.PHONY: clean
+clean: 
+	-$(DEL) stopwatch1 stopwatch1-test.o button-test.o display-test.o ledmat-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o font-test.o task-test.o tinygl-test.o
+
+
+

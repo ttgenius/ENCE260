@@ -1,0 +1,10 @@
+This is a collection of modules to provide a hardware abstraction
+layer for the AVR architecture.
+
+delay.h    --- provides timing delay routines.
+eeprom.h   --- provides routines for reading/writing EEPROM memory for non-volatile storage.
+pacer.h    --- provides routines for constructing paced loops using timer 1.
+pio.h      --- provides routines for accessing the I/O ports.  Note pio.h uses
+           advanced techniques; I suggest looking at pio-simple.h and pio-simple.c for a much simpler implementation.
+system.h   --- system dependent definitions, such as CPU speed and pin allocations.
+config.h   --- common configuration definitions.

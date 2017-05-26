@@ -1,0 +1,70 @@
+# File:   Makefile
+# Author: M. P. Hayes, UCECE
+# Date:   11 Sep 2010
+# Descr:  Makefile for ir_uart_test3
+
+CC = gcc
+CFLAGS = -Wall -Wstrict-prototypes -Wextra -g -I../../drivers/test -I../../drivers -I../../fonts -I../../utils
+
+DEL = rm
+
+
+# Default target.
+all: ir_uart_test3
+
+
+# Compile: create object files from C source files.
+ir_uart_test3-test.o: ir_uart_test3.c ../../drivers/display.h ../../drivers/navswitch.h ../../drivers/test/ir_uart.h ../../drivers/test/system.h ../../fonts/font3x5_1.h ../../utils/font.h ../../utils/pacer.h ../../utils/tinygl.h ../../utils/uint8toa.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+display-test.o: ../../drivers/display.c ../../drivers/display.h ../../drivers/ledmat.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+ledmat-test.o: ../../drivers/ledmat.c ../../drivers/ledmat.h ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+navswitch-test.o: ../../drivers/navswitch.c ../../drivers/navswitch.h ../../drivers/test/avrtest.h ../../drivers/test/delay.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+ir_uart-test.o: ../../drivers/test/ir_uart.c ../../drivers/test/ir_uart.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+mgetkey-test.o: ../../drivers/test/mgetkey.c ../../drivers/test/mgetkey.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+pio-test.o: ../../drivers/test/pio.c ../../drivers/test/avrtest.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+system-test.o: ../../drivers/test/system.c ../../drivers/test/avrtest.h ../../drivers/test/mgetkey.h ../../drivers/test/pio.h ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+timer-test.o: ../../drivers/test/timer.c ../../drivers/test/system.h ../../drivers/test/timer.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+font-test.o: ../../utils/font.c ../../drivers/test/system.h ../../utils/font.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+pacer-test.o: ../../utils/pacer.c ../../drivers/test/system.h ../../drivers/test/timer.h ../../utils/pacer.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+tinygl-test.o: ../../utils/tinygl.c ../../drivers/display.h ../../drivers/test/system.h ../../utils/font.h ../../utils/tinygl.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+uint8toa-test.o: ../../utils/uint8toa.c ../../drivers/test/system.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+
+
+
+# Link: create executable file from object files.
+ir_uart_test3: ir_uart_test3-test.o display-test.o ledmat-test.o navswitch-test.o ir_uart-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o font-test.o pacer-test.o tinygl-test.o uint8toa-test.o
+	$(CC) $(CFLAGS) $^ -o $@ -lrt
+
+
+# Clean: delete derived files.
+.PHONY: clean
+clean: 
+	-$(DEL) ir_uart_test3 ir_uart_test3-test.o display-test.o ledmat-test.o navswitch-test.o ir_uart-test.o mgetkey-test.o pio-test.o system-test.o timer-test.o font-test.o pacer-test.o tinygl-test.o uint8toa-test.o
+
+
+
